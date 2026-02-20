@@ -1,0 +1,57 @@
+<template>
+    <div class="case-manager-container">
+        <lightning-card title="Case Management" icon-name="standard:case" class="card-wrapper">
+            <!-- Loading State -->
+            <template if:true={isLoading}>
+                <div class="loading-spinner">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    <p class="loading-text">Loading cases...</p>
+                </div>
+            </template>
+
+            <!-- Success State -->
+            <template if:true={cases}>
+                <div class="table-wrapper">
+                    <div class="table-header">
+                        <h3 class="table-title">Case Records ({caseCount})</h3>
+                        <button class="refresh-btn" onclick={handleRefresh} title="Refresh cases">
+                            <lightning-icon icon-name="utility:refresh" size="small"></lightning-icon>
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <lightning-datatable
+                            key-field="Id"
+                            data={cases}
+                            columns={columns}
+                            draft-values={draftValues}
+                            onsave={handleSave}
+                            onrowaction={handleRowAction}
+                            hide-checkbox-column
+                            class="responsive-table">
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Empty State -->
+            <template if:true={isEmpty}>
+                <div class="empty-state">
+                    <lightning-icon icon-name="utility:inbox" size="large"></lightning-icon>
+                    <p class="empty-text">No cases found</p>
+                </div>
+            </template>
+
+            <!-- Error State -->
+            <template if:true={error}>
+                <div class="error-banner">
+                    <lightning-icon icon-name="utility:error" size="small" class="error-icon"></lightning-icon>
+                    <div class="error-content">
+                        <p class="error-title">Error Loading Cases</p>
+                        <p class="error-message">{error}</p>
+                    </div>
+                    <button class="retry-btn" onclick={handleRetry}>Retry</button>
+                </div>
+            </template>
+        </lightning-card>
+    </div>
+</template>
